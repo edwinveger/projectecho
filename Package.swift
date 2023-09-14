@@ -12,12 +12,25 @@ let package = Package(
         .library(name: "AppDomain", targets: ["AppDomain"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/AudioKit/AudioKitUI", exact: "0.3.5"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .target(name: "AppData", dependencies: ["AppDomain"]),
+        .target(
+            name: "AppData",
+            dependencies: ["AppDomain"]
+        ),
         .target(name: "AppDomain"),
-        .target(name: "AppFeature", dependencies: ["AppDomain"]),
+        .target(
+            name: "AppFeature",
+            dependencies: [
+                "AppDomain",
+                .product(name: "AudioKitUI", package: "AudioKitUI")
+            ]
+        ),
         .testTarget(
             name: "AppDataTests",
             dependencies: ["AppData"]
