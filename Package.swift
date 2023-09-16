@@ -23,7 +23,12 @@ let package = Package(
             name: "AppData",
             dependencies: ["AppDomain"]
         ),
-        .target(name: "AppDomain"),
+        .target(
+            name: "AppDomain",
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies")
+            ]
+        ),
         .target(
             name: "AppFeature",
             dependencies: [

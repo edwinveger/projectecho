@@ -12,6 +12,7 @@
 		E83AB6FC2AB2DEA2001C3057 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E83AB6FB2AB2DEA2001C3057 /* Assets.xcassets */; };
 		E83AB6FF2AB2DEA2001C3057 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E83AB6FE2AB2DEA2001C3057 /* Preview Assets.xcassets */; };
 		E83AB7092AB2E346001C3057 /* AppFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E83AB7082AB2E346001C3057 /* AppFeature */; };
+		E873F08A2AB5864D008BC035 /* AppData in Frameworks */ = {isa = PBXBuildFile; productRef = E873F0892AB5864D008BC035 /* AppData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E873F08A2AB5864D008BC035 /* AppData in Frameworks */,
 				E83AB7092AB2E346001C3057 /* AppFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +107,7 @@
 			name = ProjectEcho;
 			packageProductDependencies = (
 				E83AB7082AB2E346001C3057 /* AppFeature */,
+				E873F0892AB5864D008BC035 /* AppData */,
 			);
 			productName = ProjectEcho;
 			productReference = E83AB6F42AB2DEA1001C3057 /* ProjectEcho.app */;
@@ -367,6 +370,10 @@
 		E83AB7082AB2E346001C3057 /* AppFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFeature;
+		};
+		E873F0892AB5864D008BC035 /* AppData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppData;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
