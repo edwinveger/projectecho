@@ -107,45 +107,14 @@ struct RoomsView_Previews: PreviewProvider {
     }
 }
 
-struct EntityButton: View {
-
-    let entity: Entity
-    var didTap: () -> Void = { }
-
-    var body: some View {
-        Button(action: didTap) {
-            image
-                .frame(width: 48, height: 48)
-                .background {
-                    entity.isOn ? Color.yellow : Color.gray
-                }
-                .clipShape(Circle())
-        }
-        .buttonStyle(.plain)
-    }
-
-    var image: Image {
-        switch (entity.entityType, entity.isOn) {
-        case (.light, true):
-            return Image(systemName: "lightbulb.fill")
-        case (.light, false):
-            return Image(systemName: "lightbulb")
-        case (.fan, true):
-            return Image(systemName: "fanblades.fill")
-        case (.fan, false):
-            return Image(systemName: "fanblades")
-        }
-    }
-}
-
-final class RoomsModel: ObservableObject {
+public final class RoomsModel: ObservableObject {
 
     @Dependency(\.observeRoomInstances) var roomInstances
     private var cancellables: [AnyCancellable] = []
 
     @Published var rooms: [RoomInstance] = []
 
-    init() {
+    public init() {
         roomInstances.publisher
             .sink { [weak self] rooms in
                 self?.rooms = rooms
@@ -153,7 +122,7 @@ final class RoomsModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func didTapEntity(id: String)  {
+    public func didTapEntity(id: String)  {
         let entities = rooms.flatMap(\.entities)
         guard let entity = entities.first(where: { $0.id == id }) else { return }
         roomInstances.toggle(entity: entity, value: !entity.isOn)
