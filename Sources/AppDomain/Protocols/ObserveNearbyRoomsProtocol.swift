@@ -7,6 +7,8 @@ public protocol ObserveNearbyRoomsProtocol {
     var publisher: AnyPublisher<[Room], Never> { get }
 }
 
+// MARK: - BLE
+
 struct ObserveNearbyRoomsKey: TestDependencyKey {
 
     typealias Value = ObserveNearbyRoomsProtocol
@@ -23,9 +25,35 @@ extension DependencyValues {
     }
 }
 
+// MARK: - UWB
+
+struct ObserveNearbyRoomsUWBKey: TestDependencyKey {
+
+    typealias Value = ObserveNearbyRoomsProtocol
+
+    public static let previewValue = PreviewObserveNearbyRoomsService() as Value
+    public static let testValue = PreviewObserveNearbyRoomsService() as Value
+}
+
+extension DependencyValues {
+
+    public var observeNearbyRoomsUWB: ObserveNearbyRoomsProtocol {
+        get { self[ObserveNearbyRoomsUWBKey.self] }
+        set { self[ObserveNearbyRoomsUWBKey.self] = newValue }
+    }
+}
+
+// MARK: - Previews
+
 private struct PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
 
-    let subject = CurrentValueSubject<[Room], Never>([])
+    let subject = CurrentValueSubject<[Room], Never>(
+        [
+            .bathroom,
+            .livingRoom,
+            .bedroom1
+        ]
+    )
 
     var publisher: AnyPublisher<[Room], Never> {
         subject.eraseToAnyPublisher()

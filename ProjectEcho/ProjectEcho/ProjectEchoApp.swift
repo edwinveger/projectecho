@@ -17,9 +17,10 @@ struct ProjectEchoApp: App {
                 store: Store(initialState: Root.State()) {
                     Root()
                         .signpost()
-                        ._printChanges()
+                        // ._printChanges()
                 } withDependencies: {
                     $0.observeNearbyRooms = Environment.shared.bleRepository
+                    $0.observeNearbyRoomsUWB = Environment.shared.estimoteRepository
                 }
             )
         }

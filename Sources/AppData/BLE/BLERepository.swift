@@ -21,13 +21,13 @@ public class BLERepository {
     }
 
     func process(_ observations: [BeaconObservation]) {
-        print("BLERepository received \(observations.count) obs.")
-
-        let sortedObservations = observations.sorted { $0.rssi > $1.rssi }
-
-        for o in sortedObservations {
-            print("\(o.uuid.uuidString) \(o.rssi) \(o.name)")
-        }
+//        print("BLERepository received \(observations.count) obs.")
+//
+//        let sortedObservations = observations.sorted { $0.rssi > $1.rssi }
+//
+//        for o in sortedObservations {
+//            print("\(o.uuid.uuidString) \(o.rssi) \(o.name)")
+//        }
     }
 }
 

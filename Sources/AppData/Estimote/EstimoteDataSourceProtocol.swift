@@ -1,10 +1,12 @@
 import Combine
 import Foundation
 
-public typealias Distance = Float
+public struct EstimoteObservation: Equatable {
+    let id: String
+    let distance: Float
+}
 
 public protocol EstimoteDataSourceProtocol {
 
-    func observe() -> AnyPublisher<(UUID, Distance), Never>
+    func observe() -> AnyPublisher<[EstimoteObservation], Never>
 }
-

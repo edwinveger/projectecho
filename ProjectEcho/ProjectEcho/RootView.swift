@@ -19,6 +19,14 @@ struct RootView: View {
             TabView(
                 selection: $0.binding(send: Root.Action.didSelectTab)
             ) {
+                InspectorView(
+                    store: store.scope(
+                        state: \.inspectorState,
+                        action: Root.Action.inspector
+                    )
+                )
+                .tag(Root.SelectedTab.inspector)
+                
                 // RoomsView
                 RoomControlsView(
                     store: store.scope(
@@ -40,7 +48,7 @@ struct RootView_Previews: PreviewProvider {
     static let previewStore: StoreOf<Root> = Store (
         initialState: Root.State()
     ) {
-        EmptyReducer()
+        Root()
             ._printChanges()
     }
 

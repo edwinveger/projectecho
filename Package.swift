@@ -20,7 +20,7 @@ let package = Package(
     targets: [
         .target(
             name: "AppData",
-            dependencies: ["AppDomain", "Estimote"]
+            dependencies: ["AppDomain", "EstimoteUWB"]
         ),
         .target(
             name: "AppDomain",
@@ -37,8 +37,12 @@ let package = Package(
             ]
         ),
         .binaryTarget(
-            name: "Estimote",
+            name: "EstimoteProximity",
             path: "Sources/EstimoteProximitySDK.xcframework"
+        ),
+        .binaryTarget(
+            name: "EstimoteUWB",
+            path: "Sources/EstimoteUWB.xcframework"
         ),
         .executableTarget(
             name: "Sniffer"

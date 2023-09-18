@@ -65,7 +65,7 @@ extension BLEDataSource: CBCentralManagerDelegate {
         switch central.state {
         case .poweredOn:
             print("BLEDataSource has powered central. Scanning…")
-            central.scanForPeripherals(withServices: nil, options: nil)
+            //central.scanForPeripherals(withServices: nil, options: nil)
         default:
             print(central.state)
         }
@@ -84,6 +84,8 @@ extension BLEDataSource: CBCentralManagerDelegate {
             let prefix = !isKnown ? "Discovered: " : "Updated:    "
             print("\(currentTimeString) \(prefix) \(peripheral.name ?? "Unknown Device") - \(peripheral.identifier) \(RSSI)")
         }
+
+        let blacklist = ["Apple", "iPad", "iPhone", "Ringen", "Edwin", "Bagage", "Rommel", "Studeerkamer"]
 
         // always store the RSSI
         rssis[peripheral.identifier] = RSSI

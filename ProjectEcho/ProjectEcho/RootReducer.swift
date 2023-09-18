@@ -14,6 +14,7 @@ struct Root: Reducer {
         case rooms
         case arduino
         case estimote
+        case inspector
     }
 
     struct State: Equatable {
@@ -21,6 +22,7 @@ struct Root: Reducer {
 
         // MARK: Child state
         var roomControlsState = RoomControls.State()
+        var inspectorState = Inspector.State()
     }
 
     enum Action: Equatable {
@@ -28,15 +30,32 @@ struct Root: Reducer {
 
         // MARK: Child actions
         case rooms(RoomControls.Action)
+        case inspector(Inspector.Action)
     }
 
-    func reduce(into state: inout State, action: Action) -> Effect<Action> {
-        switch action {
-        case .didSelectTab(let tab):
-            state.selectedTab = tab
-            return .none
-        case .rooms:
-            return .none
+    private struct _Reducer: Reducer {
+
+        func reduce(into state: inout State, action: Action) -> Effect<Action> {
+            switch action {
+            case .didSelectTab(let tab):
+                state.selectedTab = tab
+                return .none
+            case .rooms:
+                return .none
+            case .inspector(let action):
+                return .none
+            }
+        }
+    }
+
+    var body: some Reducer<State, Action> {
+        _Reducer()
+
+        Scope(
+            state: \.inspectorState,
+            action: /Action.inspector
+        ) {
+            Inspector()
         }
     }
 }
