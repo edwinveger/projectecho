@@ -1,8 +1,13 @@
 import Combine
 import Foundation
 
-public typealias Confidence = Float
-public typealias BeaconObservation = (UUID, Confidence)
+public typealias RSSI = Float
+
+public struct BeaconObservation: Equatable {
+    let uuid: UUID
+    let name: String
+    let rssi: RSSI
+}
 
 public protocol BLEDataSourceProtocol {
 
