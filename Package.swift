@@ -20,16 +20,13 @@ let package = Package(
     targets: [
         .target(
             name: "AppData",
-            dependencies: ["AppDomain"]
+            dependencies: ["AppDomain", "Estimote"]
         ),
         .target(
             name: "AppDomain",
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
-        ),
-        .executableTarget(
-            name: "Sniffer"
         ),
         .target(
             name: "AppFeature",
@@ -38,6 +35,13 @@ let package = Package(
                 //.product(name: "AudioKitUI", package: "AudioKitUI"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
+        ),
+        .binaryTarget(
+            name: "Estimote",
+            path: "Sources/EstimoteProximitySDK.xcframework"
+        ),
+        .executableTarget(
+            name: "Sniffer"
         ),
         .testTarget(
             name: "AppDataTests",

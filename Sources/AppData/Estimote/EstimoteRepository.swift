@@ -1,5 +1,6 @@
 import AppDomain
 import Combine
+import EstimoteProximitySDK
 
 public class EstimoteRepository {
 
@@ -7,6 +8,8 @@ public class EstimoteRepository {
 
     public init(dataSource: EstimoteDataSourceProtocol) {
         self.dataSource = dataSource
+
+
     }
 }
 
