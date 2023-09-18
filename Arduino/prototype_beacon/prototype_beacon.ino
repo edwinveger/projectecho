@@ -4,14 +4,14 @@ const int potentiometerPin = A0; // Potentiometer pin
 const int speakerPin = 8;  // Speaker pin
 
 //const unsigned long bitDuration = 1000; // 0.001 seconds
-const unsigned long bitDuration = 100000; // 0.1 seconds
+const unsigned long bitDuration = 400000; // 0.1 seconds
 
 // Define the 4-bit binary value to be modulated
 const byte dataToModulate = 0b1010; // Change this to your desired 4-bit binary value
 
 bool soundEnabled = false;  // Global flag to enable/disable sound
 int volume = 0;           // Variable to store volume
-int frequencyIndex = 0;   // Index to select frequencies from the list
+int frequencyIndex = 1;   // Index to select frequencies from the list
 unsigned int frequencies[] = {220, 440, 880, 1760, 17600, 22000}; // List of frequencies
 
 // Variables to store previous button states
