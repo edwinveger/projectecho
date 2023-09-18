@@ -5,10 +5,15 @@ struct Environment {
 
     static let shared = Self()
 
-    let observeNearbyRooms: ObserveNearbyRoomsProtocol
+    let estimoteRepository: EstimoteRepository
+    let bleRepository: BLERepository
 
     init() {
-        observeNearbyRooms = RoomDetectorRepository()
+        let estimoteDataSource = EstimoteDataSource()
+        let bleDataSource = BLEDataSource()
+        estimoteRepository = EstimoteRepository(dataSource: estimoteDataSource)
+        bleRepository = BLERepository(dataSource: bleDataSource)
+
         print("Environment is ready.")
     }
 }

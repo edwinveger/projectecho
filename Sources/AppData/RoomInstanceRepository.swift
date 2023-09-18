@@ -1,6 +1,7 @@
 import AppDomain
 import Combine
 
+/// Contains the individual accessory state and allows state manipulation.
 public struct RoomInstanceRepository: ObserveRoomInstancesProtocol {
 
     public init() {

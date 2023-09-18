@@ -18,7 +18,6 @@ class BLEDelegate: NSObject, CBCentralManagerDelegate {
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
-
             central.scanForPeripherals(withServices: nil, options: nil)
         } else {
             print("Bluetooth not available.")
