@@ -10,6 +10,7 @@ let package = Package(
         .library(name: "AppData", targets: ["AppData"]),
         .library(name: "AppDomain", targets: ["AppDomain"]),
         .library(name: "AppFeature", targets: ["AppFeature"]),
+        .executable(name: "Sniffer", targets: ["Sniffer"])
     ],
     dependencies: [
         //.package(url: "https://github.com/AudioKit/AudioKitUI", exact: "0.3.5"),
@@ -26,6 +27,9 @@ let package = Package(
             dependencies: [
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
+        ),
+        .executableTarget(
+            name: "Sniffer"
         ),
         .target(
             name: "AppFeature",
