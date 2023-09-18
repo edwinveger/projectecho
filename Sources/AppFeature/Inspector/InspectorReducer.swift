@@ -33,8 +33,8 @@ public struct Inspector: Reducer {
         case .didReceiveRooms(let rooms):
             state.rooms = rooms
             return .none
-        default:
-            return .none
+        // default:
+        //     return .none
         }
     }
 }

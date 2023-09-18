@@ -43,6 +43,7 @@ struct Root: Reducer {
             case .rooms:
                 return .none
             case .inspector(let action):
+                _ = action
                 return .none
             }
         }

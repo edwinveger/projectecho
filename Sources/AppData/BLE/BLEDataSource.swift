@@ -85,7 +85,7 @@ extension BLEDataSource: CBCentralManagerDelegate {
             print("\(currentTimeString) \(prefix) \(peripheral.name ?? "Unknown Device") - \(peripheral.identifier) \(RSSI)")
         }
 
-        let blacklist = ["Apple", "iPad", "iPhone", "Ringen", "Edwin", "Bagage", "Rommel", "Studeerkamer"]
+        // let blacklist = ["Apple", "iPad", "iPhone", "Ringen", "Edwin", "Bagage", "Rommel", "Studeerkamer"]
 
         // always store the RSSI
         rssis[peripheral.identifier] = RSSI
