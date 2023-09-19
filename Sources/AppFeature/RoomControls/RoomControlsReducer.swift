@@ -8,6 +8,7 @@ public struct RoomControls: Reducer {
         var selectedRoom: Room = .livingRoom
         var rooms: [RoomInstance] = []
         var isAutoSwitchingEnabled = false
+        var isUWBEnabled = false
 
         public init() { }
     }
@@ -25,10 +26,14 @@ public struct RoomControls: Reducer {
 
     @Dependency(\.observeRoomInstances) var roomInstances
     @Dependency(\.observeNearbyRoomsUWB) var observeNearbyRoomsUWB
+    @Dependency(\.observeNearbyRoomsBLE) var observeNearbyRoomsBLE
+    @Dependency(\.isUWBEnabled) var isUWBEnabled
 
     public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .task:
+            state.isUWBEnabled = isUWBEnabled
+
             let observeRoomsEffect: Effect<Action> = .run { send in
                 for await rooms in roomInstances.publisher.values {
                     await send(.didReceiveRooms(rooms))
@@ -36,7 +41,14 @@ public struct RoomControls: Reducer {
             }
 
             let observeNearbyRoomEffect: Effect<Action> = .run { send in
-                for await nearbyRooms in observeNearbyRoomsUWB.publisher.values {
+
+                let publisher = if isUWBEnabled {
+                    observeNearbyRoomsUWB.publisher
+                } else {
+                    observeNearbyRoomsBLE.publisher
+                }
+
+                for await nearbyRooms in publisher.values {
                     guard let first = nearbyRooms.first else { continue }
                     await send(.didReceiveNearbyRoom(first))
                 }

@@ -19,7 +19,7 @@ struct ProjectEchoApp: App {
                         .signpost()
                         // ._printChanges()
                 } withDependencies: {
-                    $0.observeNearbyRooms = Environment.shared.bleRepository
+                    $0.observeNearbyRoomsBLE = Environment.shared.bleRepository
                     $0.observeNearbyRoomsUWB = Environment.shared.estimoteRepository
                 }
             )

@@ -6,7 +6,7 @@ public enum Room: CaseIterable, CustomStringConvertible, Equatable {
 
     public var description: String {
         switch self {
-        case .bedroom:   return "Slaapkamer #1"
+        case .bedroom:   return "Slaapkamer"
         case .livingRoom: return "Woonkamer"
         case .bathroom:   return "Badkamer"
         }
@@ -14,7 +14,7 @@ public enum Room: CaseIterable, CustomStringConvertible, Equatable {
 
     public var shortDescription: String {
         switch self {
-        case .bedroom:   return "SK1"
+        case .bedroom:   return "SLAAP"
         case .livingRoom: return "WOON"
         case .bathroom:   return "BAD"
         }

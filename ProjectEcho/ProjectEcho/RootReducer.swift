@@ -11,17 +11,19 @@ import ComposableArchitecture
 struct Root: Reducer {
 
     enum SelectedTab: Equatable {
-        case rooms
+        case roomsUWB
+        case roomsBLE
         case arduino
         case estimote
         case inspector
     }
 
     struct State: Equatable {
-        var selectedTab: SelectedTab = .rooms
+        var selectedTab: SelectedTab = .roomsUWB
 
         // MARK: Child state
-        var roomControlsState = RoomControls.State()
+        var roomControlsUWBState = RoomControls.State()
+        var roomControlsBLEState = RoomControls.State()
         var inspectorState = Inspector.State()
     }
 
@@ -29,7 +31,8 @@ struct Root: Reducer {
         case didSelectTab(SelectedTab)
 
         // MARK: Child actions
-        case rooms(RoomControls.Action)
+        case roomsUWB(RoomControls.Action)
+        case roomsBLE(RoomControls.Action)
         case inspector(Inspector.Action)
     }
 
@@ -40,7 +43,9 @@ struct Root: Reducer {
             case .didSelectTab(let tab):
                 state.selectedTab = tab
                 return .none
-            case .rooms:
+            case .roomsUWB:
+                return .none
+            case .roomsBLE:
                 return .none
             case .inspector(let action):
                 _ = action
@@ -60,10 +65,19 @@ struct Root: Reducer {
         }
 
         Scope(
-            state: \.roomControlsState,
-            action: /Action.rooms
+            state: \.roomControlsUWBState,
+            action: /Action.roomsUWB
         ) {
             RoomControls()
+                .dependency(\.isUWBEnabled, true)
+        }
+
+        Scope(
+            state: \.roomControlsBLEState,
+            action: /Action.roomsBLE
+        ) {
+            RoomControls()
+                .dependency(\.isUWBEnabled, false)
         }
     }
 }

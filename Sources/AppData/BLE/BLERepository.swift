@@ -34,7 +34,7 @@ public class BLERepository {
 extension BLERepository: ObserveNearbyRoomsProtocol {
 
     public var publisher: AnyPublisher<[NearbyRoom], Never> {
-        assertionFailure("Not implemented")
+        //assertionFailure("Not implemented")
 
         return Just([.init(room: .bedroom)])
             .eraseToAnyPublisher()

@@ -11,17 +11,22 @@ public struct InspectorView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: \.rooms) { viewStore in
-            VStack {
-                Text("Inspector")
-                Divider()
-                ForEach(viewStore.state, id: \.room) { nearbyRoom in
-                    nearbyRoomView(nearbyRoom)
+        NavigationView {
+            WithViewStore(store, observe: \.rooms) { viewStore in
+                VStack {
+                    ForEach(viewStore.state, id: \.room) { nearbyRoom in
+                        nearbyRoomView(nearbyRoom)
+                        Divider()
+                    }
+                    Spacer()
                 }
+                .padding()
+                .task { await viewStore.send(.task).finish() }
+
             }
-            .padding()
-            .task { await viewStore.send(.task).finish() }
+            .navigationTitle("Inspector")
         }
+
         .tabItem {
             Label("Inspector", systemImage: "waveform.and.magnifyingglass")
         }

@@ -29,7 +29,7 @@ public protocol ObserveNearbyRoomsProtocol {
 
 // MARK: - BLE
 
-struct ObserveNearbyRoomsKey: TestDependencyKey {
+private struct ObserveNearbyRoomsBLEKey: TestDependencyKey {
 
     typealias Value = ObserveNearbyRoomsProtocol
 
@@ -39,15 +39,15 @@ struct ObserveNearbyRoomsKey: TestDependencyKey {
 
 extension DependencyValues {
 
-    public var observeNearbyRooms: ObserveNearbyRoomsProtocol {
-        get { self[ObserveNearbyRoomsKey.self] }
-        set { self[ObserveNearbyRoomsKey.self] = newValue }
+    public var observeNearbyRoomsBLE: ObserveNearbyRoomsProtocol {
+        get { self[ObserveNearbyRoomsBLEKey.self] }
+        set { self[ObserveNearbyRoomsBLEKey.self] = newValue }
     }
 }
 
 // MARK: - UWB
 
-struct ObserveNearbyRoomsUWBKey: TestDependencyKey {
+private struct ObserveNearbyRoomsUWBKey: TestDependencyKey {
 
     typealias Value = ObserveNearbyRoomsProtocol
 

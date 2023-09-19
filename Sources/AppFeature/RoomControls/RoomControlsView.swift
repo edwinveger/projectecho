@@ -11,62 +11,64 @@ public struct RoomControlsView: View {
     }
 
     public var body: some View {
-        VStack {
-            VStack(spacing: 24) {
-                picker
-
-                WithViewStore(store, observe: \.isAutoSwitchingEnabled) {
-                    Toggle(isOn: $0.binding(send: RoomControls.Action.didToggleAutoSwitching)) {
-                        Text("Detecteer kamer automatisch")
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            NavigationView {
+                VStack {
+                    ForEach(viewStore.rooms, id: \.id) { room in
+                        if room.room == viewStore.selectedRoom {
+                            roomView(room)
+                        }
                     }
-                }
-            }
-            .padding()
-            .background { Color.gray.opacity(0.2).ignoresSafeArea() }
-            .overlay(alignment: .bottom) {
-                Color.black.frame(height: 1)
-            }
 
-            WithViewStore(store, observe: { $0 }) { viewStore in
-                ForEach(viewStore.rooms, id: \.id) { room in
-                    if room.room == viewStore.selectedRoom {
-                        roomView(room)
+                    .padding()
+                    VStack(spacing: 24) {
+                        picker
+                        
+                        Toggle(
+                            isOn: viewStore.binding(
+                                get: \.isAutoSwitchingEnabled,
+                                send: RoomControls.Action.didToggleAutoSwitching
+                            )
+                        ) {
+                            Text("Detecteer kamer automatisch")
+                        }
                     }
-                }
-            }
-            .padding()
-        }
-        .tabItem {
-            Label("Room controls", systemImage: "square.and.arrow.down")
-        }
-        .task {
-            await store.send(.task).finish()
-        }
-    }
+                    .padding()
+                    .background { Color.gray.opacity(0.05) }
 
-    var picker: some View {
-        HStack {
-            WithViewStore(store, observe: \.selectedRoom) { viewStore in
-                ForEach(Room.allCases, id: \.self) {
-                    pickerButton(
-                        text: $0.shortDescription,
-                        tag: $0,
-                        isSelected: viewStore.state == $0
-                    )
-                    .padding(.horizontal, 8)
                 }
+                .navigationTitle(title)
+            }
+            .task {
+                await store.send(.task).finish()
+            }
+            .tabItem {
+                Label("\(title)", systemImage: "wifi.circle")
             }
         }
     }
 
-    func pickerButton(text: String, tag: Room, isSelected: Bool) -> some View {
-        Button {
-            store.send(.didTapRoom(tag))
-        } label: {
-            Text(text)
-                .circled(filled: isSelected)
+    private var title: String {
+        if isUWBEnabled {
+            "BLE + UWB"
+        } else {
+            "BLE only"
         }
-        .buttonStyle(.plain)
+    }
+
+    private var isUWBEnabled: Bool {
+        ViewStore(store, observe: \.isUWBEnabled).state
+    }
+
+    private var picker: some View {
+        WithViewStore(store, observe: \.selectedRoom) { viewStore in
+            Picker("Topping", selection: viewStore.binding(send: RoomControls.Action.didTapRoom)) {
+                ForEach(Room.allCases, id: \.self) { topping in
+                    Text(topping.shortDescription)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
     }
 
     private let columns = [
@@ -96,7 +98,9 @@ public struct RoomControlsView: View {
 
             Spacer()
 
-            room.room.image
+            if isUWBEnabled {
+                room.room.image
+            }
         }
         .padding(.bottom)
     }
@@ -108,27 +112,16 @@ struct RoomControlsView_Previews: PreviewProvider {
         initialState: .init()
     ) {
         RoomControls()
+//            .dependency(\.isUWBEnabled, true)
     }
 
     static var previews: some View {
-        RoomControlsView(store: store)
-    }
-}
-
-private extension Text {
-
-    func circled(filled: Bool = false) -> some View {
-        self
-            .padding(8)
-            .background {
-                if filled {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.gray)
-                        .opacity(0.5)
-                } else {
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color.gray)
+        TabView {
+            RoomControlsView(store: store)
+            Text("second")
+                .tabItem {
+                    Label("Other", systemImage: "square.and.arrow.down")
                 }
-            }
+        }
     }
 }
