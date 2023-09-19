@@ -58,5 +58,12 @@ struct Root: Reducer {
         ) {
             Inspector()
         }
+
+        Scope(
+            state: \.roomControlsState,
+            action: /Action.rooms
+        ) {
+            RoomControls()
+        }
     }
 }

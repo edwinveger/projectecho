@@ -8,5 +8,7 @@ public struct EstimoteObservation: Equatable {
 
 public protocol EstimoteDataSourceProtocol {
 
+//    func start()
+//    func stop()
     func observe() -> AnyPublisher<[EstimoteObservation], Never>
 }

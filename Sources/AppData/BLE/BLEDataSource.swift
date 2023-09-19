@@ -2,12 +2,6 @@ import Combine
 import CoreBluetooth
 import Foundation
 
-//private struct Peripheral {
-//
-//    let cbPeripheral: CBPeripheral
-//    var rssi: Float?
-//}
-
 public class BLEDataSource: NSObject {
 
     private var centralManager: CBCentralManager!

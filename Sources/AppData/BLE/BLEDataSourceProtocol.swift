@@ -11,6 +11,8 @@ public struct BeaconObservation: Equatable {
 
 public protocol BLEDataSourceProtocol {
 
+//    func start()
+//    func stop()
     func observe() -> AnyPublisher<[BeaconObservation], Never>
 }
 

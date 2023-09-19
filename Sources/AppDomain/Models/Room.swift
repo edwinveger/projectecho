@@ -1,4 +1,4 @@
-public enum Room: CaseIterable, CustomStringConvertible {
+public enum Room: CaseIterable, CustomStringConvertible, Equatable {
 
     case bedroom1
     case bedroom2

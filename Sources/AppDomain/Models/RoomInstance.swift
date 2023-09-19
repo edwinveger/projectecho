@@ -1,11 +1,11 @@
 import Foundation
 
-public enum EntityType {
+public enum EntityType: Equatable {
     case light
     case fan
 }
 
-public struct Entity {
+public struct Entity: Equatable {
 
     public init(
         id: String,
@@ -22,7 +22,7 @@ public struct Entity {
     public var isOn: Bool
 }
 
-public struct RoomInstance {
+public struct RoomInstance: Equatable {
 
     public init(
         room: Room,

@@ -27,7 +27,6 @@ struct RootView: View {
                 )
                 .tag(Root.SelectedTab.inspector)
                 
-                // RoomsView
                 RoomControlsView(
                     store: store.scope(
                         state: \.roomControlsState,
