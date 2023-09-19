@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import AppDomain
 import SwiftUI
 
 public struct InspectorView: View {
@@ -14,8 +15,8 @@ public struct InspectorView: View {
             VStack {
                 Text("Inspector")
                 Divider()
-                ForEach(viewStore.state, id: \.self) { room in
-                    Text(room.description)
+                ForEach(viewStore.state, id: \.room) { nearbyRoom in
+                    nearbyRoomView(nearbyRoom)
                 }
             }
             .padding()
@@ -24,6 +25,37 @@ public struct InspectorView: View {
         .tabItem {
             Label("Inspector", systemImage: "waveform.and.magnifyingglass")
         }
+    }
+
+    let measurementFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.minimumFractionDigits = 2
+        f.maximumFractionDigits = 2
+        return f
+    }()
+
+    func nearbyRoomView(_ nearbyRoom: NearbyRoom) -> some View {
+        HStack {
+            nearbyRoom.room.image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 48, maxHeight: 48)
+
+            Text(nearbyRoom.room.description)
+
+            Spacer()
+
+            if let distance = nearbyRoom.distance {
+                Text(
+                    (
+                        measurementFormatter.string(
+                        from: NSNumber(value: distance)
+                    ) ?? ""
+                        ) + " m."
+                )
+            }
+        }
+        .font(.system(size: 20))
     }
 }
 

@@ -12,15 +12,20 @@ public struct RoomControlsView: View {
 
     public var body: some View {
         VStack {
-            picker
+            VStack(spacing: 24) {
+                picker
 
-            WithViewStore(store, observe: \.isAutoSwitchingEnabled) {
-                Toggle(isOn: $0.binding(send: RoomControls.Action.didToggleAutoSwitching)) {
-                    Text("Detecteer kamer automatisch")
+                WithViewStore(store, observe: \.isAutoSwitchingEnabled) {
+                    Toggle(isOn: $0.binding(send: RoomControls.Action.didToggleAutoSwitching)) {
+                        Text("Detecteer kamer automatisch")
+                    }
                 }
             }
-
-            Divider()
+            .padding()
+            .background { Color.gray.opacity(0.2).ignoresSafeArea() }
+            .overlay(alignment: .bottom) {
+                Color.black.frame(height: 1)
+            }
 
             WithViewStore(store, observe: { $0 }) { viewStore in
                 ForEach(viewStore.rooms, id: \.id) { room in
@@ -29,10 +34,8 @@ public struct RoomControlsView: View {
                     }
                 }
             }
-
-            Spacer()
+            .padding()
         }
-        .padding()
         .tabItem {
             Label("Room controls", systemImage: "square.and.arrow.down")
         }
@@ -88,9 +91,12 @@ public struct RoomControlsView: View {
                         Text(entity.id)
                             .font(.system(size: 14))
                     }
-
                 }
             }
+
+            Spacer()
+
+            room.room.image
         }
         .padding(.bottom)
     }

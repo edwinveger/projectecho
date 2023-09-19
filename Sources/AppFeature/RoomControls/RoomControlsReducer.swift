@@ -18,7 +18,7 @@ public struct RoomControls: Reducer {
         case didTapRoom(Room)
         case didToggleAutoSwitching(isEnabled: Bool)
         case didReceiveRooms([RoomInstance])
-        case didReceiveNearbyRoom(Room)
+        case didReceiveNearbyRoom(NearbyRoom)
     }
 
     public init() { }
@@ -62,9 +62,9 @@ public struct RoomControls: Reducer {
         case .didReceiveRooms(let array):
             state.rooms = array
             return .none
-        case .didReceiveNearbyRoom(let room):
+        case .didReceiveNearbyRoom(let nearbyRoom):
             if state.isAutoSwitchingEnabled {
-                state.selectedRoom = room
+                state.selectedRoom = nearbyRoom.room
             }
             return .none
         }

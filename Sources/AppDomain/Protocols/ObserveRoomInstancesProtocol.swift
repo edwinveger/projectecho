@@ -56,19 +56,12 @@ extension Array<RoomInstance> {
             ]
         )
 
-        let bedroom1 = RoomInstance(
-            room: .bedroom1,
+        let bedroom = RoomInstance(
+            room: .bedroom,
             entities: [
                 .init(id: "bed1_light_1", entityType: .light, isOn: false),
                 .init(id: "bed1_light_2", entityType: .light, isOn: false),
                 .init(id: "bed1_light_3", entityType: .light, isOn: false)
-            ]
-        )
-
-        let bedroom2 = RoomInstance(
-            room: .bedroom2,
-            entities: [
-                .init(id: "bed2_light_1", entityType: .light, isOn: false)
             ]
         )
 
@@ -85,8 +78,7 @@ extension Array<RoomInstance> {
 
         return [
             bathroom,
-            bedroom1,
-            bedroom2,
+            bedroom,
             livingRoom
         ]
     }

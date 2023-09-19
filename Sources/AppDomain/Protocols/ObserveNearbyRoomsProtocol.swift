@@ -1,10 +1,30 @@
 import Combine
 import Dependencies
 
+/// Represents a detected, nearby room.
+public struct NearbyRoom: Equatable {
+
+    public let room: Room
+    /// Distance in meters.
+    public let distance: Float?
+
+    public let rssi: Float?
+
+    public init(
+        room: Room,
+        distance: Float? = nil,
+        rssi: Float? = nil
+    ) {
+        self.room = room
+        self.distance = distance
+        self.rssi = rssi
+    }
+}
+
 public protocol ObserveNearbyRoomsProtocol {
 
     /// Emits a set of rooms along with a confidence value.
-    var publisher: AnyPublisher<[Room], Never> { get }
+    var publisher: AnyPublisher<[NearbyRoom], Never> { get }
 }
 
 // MARK: - BLE
@@ -47,15 +67,15 @@ extension DependencyValues {
 
 private struct PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
 
-    let subject = CurrentValueSubject<[Room], Never>(
+    let subject = CurrentValueSubject<[NearbyRoom], Never>(
         [
-            .bathroom,
-            .livingRoom,
-            .bedroom1
+            .init(room: .bathroom, distance: 5),
+            .init(room: .livingRoom, distance: 10),
+            .init(room: .bedroom, distance: 15)
         ]
     )
 
-    var publisher: AnyPublisher<[Room], Never> {
+    var publisher: AnyPublisher<[NearbyRoom], Never> {
         subject.eraseToAnyPublisher()
     }
 }

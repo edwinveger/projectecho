@@ -5,7 +5,7 @@ public struct Inspector: Reducer {
 
     public struct State: Equatable {
 
-        var rooms: [Room] = []
+        var rooms: [NearbyRoom] = []
 
         public init() { }
     }
@@ -15,7 +15,7 @@ public struct Inspector: Reducer {
         case task
 
         // publishers
-        case didReceiveRooms([Room])
+        case didReceiveRooms([NearbyRoom])
     }
 
     public init() { }

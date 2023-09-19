@@ -12,7 +12,7 @@ public class EstimoteRepository {
 
 extension EstimoteRepository: ObserveNearbyRoomsProtocol {
 
-    public var publisher: AnyPublisher<[Room], Never> {
+    public var publisher: AnyPublisher<[NearbyRoom], Never> {
         dataSource
             .observe()
             .map {
@@ -27,11 +27,17 @@ extension EstimoteRepository: ObserveNearbyRoomsProtocol {
 
 extension EstimoteObservation {
 
-    var model: Room? {
+    var model: NearbyRoom? {
+        guard let room = self.room else { return nil }
+
+        return .init(room: room, distance: distance)
+    }
+
+    private var room: Room? {
         switch id {
         case "f37e1c1ac2d33623e1d828a83fbc9a2c":
             // CARAMEL
-            return .bedroom1
+            return .bedroom
         case "f8cc24e7efd6408d21bd000646bcc618":
             // COCONUT
             return .livingRoom

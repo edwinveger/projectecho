@@ -33,8 +33,10 @@ public class BLERepository {
 
 extension BLERepository: ObserveNearbyRoomsProtocol {
 
-    public var publisher: AnyPublisher<[Room], Never> {
-        Just([.bedroom1])
+    public var publisher: AnyPublisher<[NearbyRoom], Never> {
+        assertionFailure("Not implemented")
+
+        return Just([.init(room: .bedroom)])
             .eraseToAnyPublisher()
     }
 }
