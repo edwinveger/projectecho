@@ -16,6 +16,7 @@
 		E873F08F2AB70933008BC035 /* RootReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E873F08E2AB70933008BC035 /* RootReducer.swift */; };
 		E873F0912AB7099C008BC035 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E873F0902AB7099C008BC035 /* RootView.swift */; };
 		E873F0952AB71240008BC035 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E873F0942AB71240008BC035 /* Environment.swift */; };
+		E88C3C3E2AB9D95400B4FC24 /* FFTFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E88C3C3D2AB9D95400B4FC24 /* FFTFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 			files = (
 				E873F08A2AB5864D008BC035 /* AppData in Frameworks */,
 				E83AB7092AB2E346001C3057 /* AppFeature in Frameworks */,
+				E88C3C3E2AB9D95400B4FC24 /* FFTFeature in Frameworks */,
 				E873F08D2AB708CE008BC035 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +119,7 @@
 				E83AB7082AB2E346001C3057 /* AppFeature */,
 				E873F0892AB5864D008BC035 /* AppData */,
 				E873F08C2AB708CE008BC035 /* ComposableArchitecture */,
+				E88C3C3D2AB9D95400B4FC24 /* FFTFeature */,
 			);
 			productName = ProjectEcho;
 			productReference = E83AB6F42AB2DEA1001C3057 /* ProjectEcho.app */;
@@ -313,6 +316,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth wordt gebruikt om beacons te vinden.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Met de microfoon kunnen we de frequenties tonen.";
 				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Nearby Interaction wordt gebruik voor precieze plaatsbepaling.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -345,6 +349,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Bluetooth wordt gebruikt om beacons te vinden.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Met de microfoon kunnen we de frequenties tonen.";
 				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Nearby Interaction wordt gebruik voor precieze plaatsbepaling.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -412,6 +417,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E873F08B2AB708CE008BC035 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		E88C3C3D2AB9D95400B4FC24 /* FFTFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FFTFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

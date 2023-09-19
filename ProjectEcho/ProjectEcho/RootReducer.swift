@@ -16,6 +16,7 @@ struct Root: Reducer {
         case arduino
         case estimote
         case inspector
+        case fft
     }
 
     struct State: Equatable {

@@ -5,10 +5,10 @@
 //  Created by Edwin on 17/09/2023.
 //
 
-import SwiftUI
-//import AppData
 import AppFeature
 import ComposableArchitecture
+import FFTFeature
+import SwiftUI
 
 struct RootView: View {
 
@@ -47,6 +47,12 @@ struct RootView: View {
                 //     .tag(Root.SelectedTab.arduino)
                 // EstimoteView()
                 //     .tag(Root.SelectedTab.estimote)
+
+                TunerView()
+                    .tabItem {
+                        Label("FFT", systemImage: "waveform.path")
+                    }
+                    .tag(Root.SelectedTab.fft)
             }
         }
     }
