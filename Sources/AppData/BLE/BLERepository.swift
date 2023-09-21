@@ -11,13 +11,15 @@ public class BLERepository {
     public init(dataSource: BLEDataSourceProtocol) {
         self.dataSource = dataSource
 
-         dataSource.observe()
+        dataSource.observe()
             .removeDuplicates()
             .throttle(for: 1, scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] in
                 self?.process($0)
             }
             .store(in: &cancellables)
+
+        activate()
     }
 
     func process(_ observations: [BeaconObservation]) {
@@ -32,6 +34,10 @@ public class BLERepository {
 }
 
 extension BLERepository: ObserveNearbyRoomsProtocol {
+
+    public var isActive: Bool { dataSource.isActive }
+    public func activate() { dataSource.activate() }
+    public func deactivate() { dataSource.deactivate() }
 
     public var publisher: AnyPublisher<[NearbyRoom], Never> {
         //assertionFailure("Not implemented")

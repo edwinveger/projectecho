@@ -1,3 +1,4 @@
+import AppDomain
 import Combine
 import Foundation
 
@@ -6,9 +7,7 @@ public struct EstimoteObservation: Equatable {
     let distance: Float
 }
 
-public protocol EstimoteDataSourceProtocol {
+public protocol EstimoteDataSourceProtocol: Activatable {
 
-//    func start()
-//    func stop()
     func observe() -> AnyPublisher<[EstimoteObservation], Never>
 }

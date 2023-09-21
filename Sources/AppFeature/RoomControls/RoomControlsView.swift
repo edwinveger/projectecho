@@ -38,6 +38,10 @@ public struct RoomControlsView: View {
 
                 }
                 .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                //.toolbar {
+                //    activateButton
+                //}
             }
             .task {
                 await store.send(.task).finish()
@@ -53,6 +57,14 @@ public struct RoomControlsView: View {
             "BLE + UWB"
         } else {
             "BLE only"
+        }
+    }
+
+    private var activateButton: some View {
+        WithViewStore(store, observe: \.isActive) { viewStore in
+            Button("\(viewStore.state ? "yes" : "no")") {
+                viewStore.send(.didTapActivateToggle)
+            }
         }
     }
 

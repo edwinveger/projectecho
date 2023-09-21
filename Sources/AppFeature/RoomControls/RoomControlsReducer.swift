@@ -9,6 +9,7 @@ public struct RoomControls: Reducer {
         var rooms: [RoomInstance] = []
         var isAutoSwitchingEnabled = false
         var isUWBEnabled = false
+        var isActive = false
 
         public init() { }
     }
@@ -17,6 +18,7 @@ public struct RoomControls: Reducer {
         case task
         case didTapEntity(id: String)
         case didTapRoom(Room)
+        case didTapActivateToggle
         case didToggleAutoSwitching(isEnabled: Bool)
         case didReceiveRooms([RoomInstance])
         case didReceiveNearbyRoom(NearbyRoom)
@@ -41,7 +43,6 @@ public struct RoomControls: Reducer {
             }
 
             let observeNearbyRoomEffect: Effect<Action> = .run { send in
-
                 let publisher = if isUWBEnabled {
                     observeNearbyRoomsUWB.publisher
                 } else {
@@ -67,6 +68,17 @@ public struct RoomControls: Reducer {
             return .none
         case .didTapRoom(let room):
             state.selectedRoom = room
+            return .none
+        case .didTapActivateToggle:
+            let repository: ObserveNearbyRoomsProtocol =
+            if state.isUWBEnabled {
+                observeNearbyRoomsUWB
+            } else {
+                observeNearbyRoomsBLE
+            }
+
+            repository.isActive ? repository.deactivate() : repository.activate()
+            state.isActive = repository.isActive
             return .none
         case .didToggleAutoSwitching(isEnabled: let isEnabled):
             state.isAutoSwitchingEnabled = isEnabled

@@ -7,10 +7,15 @@ public class EstimoteRepository {
 
     public init(dataSource: EstimoteDataSourceProtocol) {
         self.dataSource = dataSource
+        activate()
     }
 }
 
 extension EstimoteRepository: ObserveNearbyRoomsProtocol {
+
+    public var isActive: Bool { dataSource.isActive }
+    public func activate() { dataSource.activate() }
+    public func deactivate() { dataSource.deactivate() }
 
     public var publisher: AnyPublisher<[NearbyRoom], Never> {
         dataSource

@@ -1,3 +1,4 @@
+import AppDomain
 import Combine
 import Foundation
 
@@ -9,10 +10,8 @@ public struct BeaconObservation: Equatable {
     let rssi: RSSI
 }
 
-public protocol BLEDataSourceProtocol {
+public protocol BLEDataSourceProtocol: Activatable {
 
-//    func start()
-//    func stop()
     func observe() -> AnyPublisher<[BeaconObservation], Never>
 }
 

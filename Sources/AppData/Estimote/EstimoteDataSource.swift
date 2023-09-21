@@ -8,13 +8,13 @@ public class EstimoteDataSource {
     private var uwbManager: EstimoteUWBManager!
     private let subject = CurrentValueSubject<[EstimoteObservation], Never>([])
 
+    public private(set) var isActive: Bool = false
+
     public init() {
         uwbManager = EstimoteUWBManager(
             delegate: self,
             options: EstimoteUWBOptions(shouldHandleConnectivity: true, isCameraAssisted: false)
         )
-
-        uwbManager.startScanning()
     }
 }
 
@@ -45,6 +45,18 @@ extension EstimoteDataSource: EstimoteUWBManagerDelegate {
 }
 
 extension EstimoteDataSource: EstimoteDataSourceProtocol {
+
+    public func activate() {
+        guard !isActive else { return print("EstimoteDS already active.") }
+        isActive = true
+        uwbManager.startScanning()
+    }
+
+    public func deactivate() {
+        guard isActive else { return print("EstimoteDS not active.") }
+        isActive = false
+        uwbManager.stopScanning()
+    }
 
     public func observe() -> AnyPublisher<[EstimoteObservation], Never> {
         subject

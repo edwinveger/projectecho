@@ -21,7 +21,7 @@ public struct NearbyRoom: Equatable {
     }
 }
 
-public protocol ObserveNearbyRoomsProtocol {
+public protocol ObserveNearbyRoomsProtocol: Activatable {
 
     /// Emits a set of rooms along with a confidence value.
     var publisher: AnyPublisher<[NearbyRoom], Never> { get }
@@ -65,7 +65,19 @@ extension DependencyValues {
 
 // MARK: - Previews
 
-private struct PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
+private class PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
+
+    var isActive: Bool = false
+
+    public func activate() {
+        guard !isActive else { return print("DS already active.") }
+        isActive = true
+    }
+
+    public func deactivate() {
+        guard isActive else { return print("DS not active.") }
+        isActive = false
+    }
 
     let subject = CurrentValueSubject<[NearbyRoom], Never>(
         [

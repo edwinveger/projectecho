@@ -8,8 +8,9 @@ public class BLEDataSource: NSObject {
     private var peripherals: [CBPeripheral] = []
     private var rssis: [UUID: NSNumber] = [:]
     private var subject = CurrentValueSubject<[BeaconObservation], Never>([])
-
     private var cancellables: [AnyCancellable] = []
+
+    public private(set) var isActive: Bool = false
 
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -24,7 +25,7 @@ public class BLEDataSource: NSObject {
         Timer.publish(every: 5, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
-                guard let self else { return }
+                guard let self, self.isActive else { return }
                 let currentTimeString = self.dateFormatter.string(from: Date())
                 print("\(currentTimeString) Scheduling RSSI poll…")
                 self.pollRssis()
@@ -55,11 +56,9 @@ public class BLEDataSource: NSObject {
 extension BLEDataSource: CBCentralManagerDelegate {
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
-
         switch central.state {
         case .poweredOn:
-            print("BLEDataSource has powered central. Scanning…")
-            //central.scanForPeripherals(withServices: nil, options: nil)
+            break
         default:
             print(central.state)
         }
@@ -110,6 +109,18 @@ extension BLEDataSource: CBPeripheralDelegate {
 }
 
 extension BLEDataSource: BLEDataSourceProtocol {
+
+    public func activate() {
+        guard !isActive else { return print("BLEDS already active.") }
+        isActive = true
+        centralManager.scanForPeripherals(withServices: [.deviceInformationService], options: nil)
+    }
+
+    public func deactivate() {
+        guard isActive else { return print("BLEDS not active.") }
+        isActive = false
+        centralManager.stopScan()
+    }
 
     public func observe() -> AnyPublisher<[BeaconObservation], Never> {
         subject
