@@ -55,9 +55,8 @@ public struct InspectorView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: 48, maxHeight: 48)
             } else {
-                Image(systemName: "circle.inset.filled")
-                    .frame(maxWidth: 48, maxHeight: 48)
-                    .foregroundColor(nearbyRoom.room.color)
+                nearbyRoom.room.bleImage
+                    .frame(maxWidth: 24, maxHeight: 24)
             }
 
             Text(nearbyRoom.room.description)

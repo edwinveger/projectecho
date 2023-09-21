@@ -9,15 +9,18 @@ public struct Entity: Equatable {
 
     public init(
         id: String,
+        name: String,
         entityType: EntityType,
         isOn: Bool
     ) {
         self.id = id
+        self.name = name
         self.entityType = entityType
         self.isOn = isOn
     }
 
     public let id: String
+    public let name: String
     public let entityType: EntityType
     public var isOn: Bool
 }

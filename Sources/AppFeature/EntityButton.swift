@@ -9,12 +9,16 @@ struct EntityButton: View {
     var body: some View {
         Button(action: didTap) {
             image
-                .frame(width: 48, height: 48)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(16)
+                .frame(width: 64, height: 64)
                 .background {
                     entity.isOn ? Color.yellow : Color.gray
                 }
                 .clipShape(Circle())
         }
+        .padding()
         .buttonStyle(.plain)
     }
 
@@ -28,6 +32,16 @@ struct EntityButton: View {
             return Image(systemName: "fanblades.fill")
         case (.fan, false):
             return Image(systemName: "fanblades")
+        }
+    }
+}
+
+struct EntityButton_Previews: PreviewProvider {
+
+    static var previews: some View {
+        HStack {
+            EntityButton(entity: .init(id: "bert", name: "preview1", entityType: .fan, isOn: true))
+            EntityButton(entity: .init(id: "bert", name: "preview2", entityType: .light, isOn: false))
         }
     }
 }

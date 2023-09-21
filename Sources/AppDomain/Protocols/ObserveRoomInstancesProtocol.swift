@@ -51,28 +51,78 @@ extension Array<RoomInstance> {
         let bathroom = RoomInstance(
             room: .bathroom,
             entities: [
-                .init(id: "bath1", entityType: .light, isOn: false),
-                .init(id: "bath_fan_1", entityType: .fan, isOn: false)
+                .init(
+                    id: "bath1",
+                    name: "Plafond",
+                    entityType: .light,
+                    isOn: false
+                ),
+                .init(
+                    id: "bath_fan_1",
+                    name: "Ventilator",
+                    entityType: .fan,
+                    isOn: false
+                )
             ]
         )
 
         let bedroom = RoomInstance(
             room: .bedroom,
             entities: [
-                .init(id: "bed1_light_1", entityType: .light, isOn: false),
-                .init(id: "bed1_light_2", entityType: .light, isOn: false),
-                .init(id: "bed1_light_3", entityType: .light, isOn: false)
+                .init(
+                    id: "bed1_light_1",
+                    name: "Plafond",
+                    entityType: .light,
+                    isOn: false
+                ),
+                .init(
+                    id: "bed1_light_2",
+                    name: "Spot #1",
+                    entityType: .light,
+                    isOn: false
+                ),
+                .init(
+                    id: "bed1_light_3",
+                    name: "Spot #2",
+                    entityType: .light,
+                    isOn: false
+                )
             ]
         )
 
         let livingRoom = RoomInstance(
             room: .livingRoom,
             entities: [
-                .init(id: "living1_light_1", entityType: .light, isOn: true),
-                .init(id: "living1_light_2", entityType: .light, isOn: false),
-                .init(id: "living1_light_3", entityType: .light, isOn: true),
-                .init(id: "living1_light_4", entityType: .light, isOn: false),
-                .init(id: "living1_fan_1", entityType: .fan, isOn: false)
+                .init(
+                    id: "living1_light_1",
+                    name: "Bank",
+                    entityType: .light,
+                    isOn: true
+                ),
+                .init(
+                    id: "living1_light_2",
+                    name: "Plafond",
+                    entityType: .light,
+                    isOn: false
+                ),
+                .init(
+                    id: "living1_light_3",
+                    name: "Muurspotjes",
+                    entityType: .light,
+                    isOn: true
+                ),
+                .init(
+                    id: "living1_light_4",
+                    name: "Deur",
+                    entityType: .light,
+                    isOn: false
+                ),
+                .init(
+                    id: "living1_fan_1",
+                    name: "Ventilator",
+                    entityType: .fan,
+                    isOn: false
+                )
             ]
         )
 

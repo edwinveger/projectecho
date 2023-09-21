@@ -15,7 +15,7 @@ extension Room {
         }
     }
 
-    var color: Color {
+    var bleColor: Color {
         switch self {
         case .bathroom:
             .red
@@ -24,5 +24,11 @@ extension Room {
         case .livingRoom:
             .blue
         }
+    }
+
+    var bleImage: some View {
+        Image(systemName: "circle.inset.filled")
+            .resizable()
+            .foregroundColor(bleColor)
     }
 }

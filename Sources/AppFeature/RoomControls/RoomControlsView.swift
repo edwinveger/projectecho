@@ -97,13 +97,14 @@ public struct RoomControlsView: View {
 
             LazyVGrid(columns: columns) {
                 ForEach(room.entities, id: \.id) { entity in
-                    VStack {
+                    VStack(spacing: 0) {
                             EntityButton(entity: entity) {
                                 store.send(.didTapEntity(id: entity.id))
                             }
 
-                        Text(entity.id)
+                        Text(entity.name)
                             .font(.system(size: 14))
+                            .opacity(0.5)
                     }
                 }
             }
@@ -112,6 +113,9 @@ public struct RoomControlsView: View {
 
             if isUWBEnabled {
                 room.room.image
+            } else {
+                room.room.bleImage
+                    .frame(maxWidth: 48, maxHeight: 48)
             }
         }
         .padding(.bottom)
