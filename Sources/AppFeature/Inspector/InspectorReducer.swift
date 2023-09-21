@@ -8,7 +8,9 @@ public struct Inspector: Reducer {
         var rooms: [NearbyRoom] = []
         var isUWBEnabled = false
 
-        public init() { }
+        public init(isUWBEnabled: Bool = false) {
+            self.isUWBEnabled = isUWBEnabled
+        }
     }
 
     public enum Action: Equatable {
@@ -21,14 +23,13 @@ public struct Inspector: Reducer {
 
     public init() { }
 
-    @Dependency(\.isUWBEnabled) var isUWBEnabled
     @Dependency(\.observeNearbyRoomsUWB) var observeNearbyRoomsUWB
     @Dependency(\.observeNearbyRoomsBLE) var observeNearbyRoomsBLE
 
     public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .task:
-            state.isUWBEnabled = isUWBEnabled
+            let isUWBEnabled = state.isUWBEnabled
 
             return .run { send in
                 let publisher = if isUWBEnabled {

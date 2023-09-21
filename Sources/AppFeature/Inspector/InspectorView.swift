@@ -83,10 +83,9 @@ public struct InspectorView: View {
 struct InspectorView_Previews: PreviewProvider {
 
     static let store = StoreOf<Inspector>(
-        initialState: .init()
+        initialState: .init(isUWBEnabled: false)
     ) {
         Inspector()
-            .dependency(\.isUWBEnabled, false)
     }
 
     static var previews: some View {

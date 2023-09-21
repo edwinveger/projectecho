@@ -11,7 +11,9 @@ public struct RoomControls: Reducer {
         var isUWBEnabled = false
         var isActive = false
 
-        public init() { }
+        public init(isUWBEnabled: Bool = false) {
+            self.isUWBEnabled = isUWBEnabled
+        }
     }
 
     public enum Action: Equatable {
@@ -29,18 +31,17 @@ public struct RoomControls: Reducer {
     @Dependency(\.observeRoomInstances) var roomInstances
     @Dependency(\.observeNearbyRoomsUWB) var observeNearbyRoomsUWB
     @Dependency(\.observeNearbyRoomsBLE) var observeNearbyRoomsBLE
-    @Dependency(\.isUWBEnabled) var isUWBEnabled
 
     public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .task:
-            state.isUWBEnabled = isUWBEnabled
-
             let observeRoomsEffect: Effect<Action> = .run { send in
                 for await rooms in roomInstances.publisher.values {
                     await send(.didReceiveRooms(rooms))
                 }
             }
+
+            let isUWBEnabled = state.isUWBEnabled
 
             let observeNearbyRoomEffect: Effect<Action> = .run { send in
                 let publisher = if isUWBEnabled {

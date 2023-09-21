@@ -24,10 +24,10 @@ struct Root: Reducer {
         var selectedTab: SelectedTab = .roomsUWB
 
         // MARK: Child state
-        var roomControlsUWBState = RoomControls.State()
-        var roomControlsBLEState = RoomControls.State()
-        var inspectorUWBState = Inspector.State()
-        var inspectorBLEState = Inspector.State()
+        var roomControlsUWBState = RoomControls.State(isUWBEnabled: true)
+        var roomControlsBLEState = RoomControls.State(isUWBEnabled: false)
+        var inspectorUWBState = Inspector.State(isUWBEnabled: true)
+        var inspectorBLEState = Inspector.State(isUWBEnabled: false)
     }
 
     enum Action: Equatable {
@@ -67,7 +67,6 @@ struct Root: Reducer {
             action: /Action.roomsUWB
         ) {
             RoomControls()
-                .dependency(\.isUWBEnabled, true)
         }
 
         Scope(
@@ -75,7 +74,6 @@ struct Root: Reducer {
             action: /Action.roomsBLE
         ) {
             RoomControls()
-                .dependency(\.isUWBEnabled, false)
         }
 
         Scope(
@@ -83,7 +81,6 @@ struct Root: Reducer {
             action: /Action.inspectorUWB
         ) {
             Inspector()
-                .dependency(\.isUWBEnabled, true)
         }
 
         Scope(
@@ -91,7 +88,6 @@ struct Root: Reducer {
             action: /Action.inspectorBLE
         ) {
             Inspector()
-                .dependency(\.isUWBEnabled, false)
         }
     }
 }
