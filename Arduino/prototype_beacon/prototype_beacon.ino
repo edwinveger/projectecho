@@ -82,8 +82,12 @@ void playSound() {
 }
 
 unsigned int carrierFrequency() { 
-  return 2000;
-  return frequencies[frequencyIndex];
+  int potValue = analogRead(A0);
+  Serial.println(potValue);
+  int hertz = map(potValue, 0, 1023, 2000, 4000);
+  return hertz;
+  
+  // return frequencies[frequencyIndex];
 }
 
 void modulateAndEmit(int bit) {
