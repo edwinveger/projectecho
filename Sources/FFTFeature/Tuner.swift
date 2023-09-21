@@ -4,6 +4,7 @@ import AudioKit
 import AudioKitEX
 import AudioKitUI
 import AudioToolbox
+import Combine
 import SoundpipeAudioKit
 import SwiftUI
 
@@ -14,6 +15,9 @@ public struct TunerData {
     var amplitude: Float = 0.0
     var noteNameWithSharps = "-"
     var noteNameWithFlats = "-"
+
+    var askBits: String = ""
+    var carrierAmplitudeThreshold: Float = 0.0001
 }
 
 public class TunerConductor: ObservableObject, HasAudioEngine {
@@ -37,8 +41,11 @@ public class TunerConductor: ObservableObject, HasAudioEngine {
     let noteNamesWithSharps = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
     let noteNamesWithFlats = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"]
 
-    init() {
+    var twoKiloHertzAmplitudeSubject = PassthroughSubject<Float, Never>()
 
+    private var cancellables: [AnyCancellable] = []
+
+    init() {
 #if os(iOS)
         do {
             Settings.bufferLength = .short
@@ -59,7 +66,7 @@ public class TunerConductor: ObservableObject, HasAudioEngine {
         initialDevice = device
 
         mic = input
-        tappableNodeA = Fader(mic)
+        tappableNodeA = Fader(mic)//, gain: 12)
         tappableNodeB = Fader(tappableNodeA)
 //        tappableNodeB2 = BandPassFilter(tappableNodeB, centerFrequency: 440, bandwidth: 12_000)
 //        tappableNodeB2 = EqualizerFilter(tappableNodeB, centerFrequency: 440)
@@ -74,10 +81,14 @@ public class TunerConductor: ObservableObject, HasAudioEngine {
                 self.update(pitch[0], amp[0])
             }
         }
-//        tracker.start()
+        //        tracker.start()
 
-        fftTracker = FFTTap(mic, bufferSize: 512, callbackQueue: .main) { frequencies in
+        fftTracker = FFTTap(mic, bufferSize: 512, callbackQueue: .main) { [weak self] frequencies in
             let binWidth: Float = Float(44_100 / 2) / Float(frequencies.count)
+
+            let carrierFrequency = 2000
+            let carrierBinIndex = carrierFrequency / Int(binWidth)
+            self?.twoKiloHertzAmplitudeSubject.send(frequencies[carrierBinIndex])
 
             let line = frequencies
                 .enumerated()
@@ -88,11 +99,29 @@ public class TunerConductor: ObservableObject, HasAudioEngine {
                 .joined(separator: " | ")
 
             guard !line.isEmpty else { return }
-            print(line)
-
+//            print(line)
         }
         fftTracker.isNormalized = false
         fftTracker.start()
+
+        twoKiloHertzAmplitudeSubject
+            .sink { [weak self] in
+                self?.appendBit($0)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func appendBit(_ v: Float) {
+        var string = data.askBits
+
+        string = String(string.suffix(50))
+        string.append(v > data.carrierAmplitudeThreshold ? "1" : "." )
+
+        data.askBits = string
+    }
+
+    func setThreshold(_ threshold: Float) {
+        data.carrierAmplitudeThreshold = threshold
     }
 
     func update(_ pitch: AUValue, _ amp: AUValue) {
@@ -160,6 +189,7 @@ public struct TunerView: View {
             InputDevicePicker(device: conductor.initialDevice)
 
             NodeRollingView(conductor.tappableNodeA).clipped()
+                .frame(height: 64)
             NodeOutputView(conductor.tappableNodeB).clipped()
 
             FFTView(
@@ -170,6 +200,29 @@ public struct TunerView: View {
             )
             .clipped()
             //NodeFFTView(conductor.tappableNodeC).clipped()
+
+
+            Text("2kHz bits")
+                .monospaced()
+            Group {
+                Text("^" + conductor.data.askBits.prefix(25))
+                    .monospaced()
+                Text(conductor.data.askBits.suffix(25) + "$")
+                    .monospaced()
+            }
+//            .font(.system(size: 8))
+
+            VStack {
+                Slider(
+                    value: .init(
+                        get: { conductor.data.carrierAmplitudeThreshold },
+                        set: { conductor.setThreshold($0) }
+                    ),
+                    in: 0.0001...0.001
+                )
+                .padding()
+                Text("Carrier amplitude threshold: \(conductor.data.carrierAmplitudeThreshold)")
+            }
         }
         .padding(.bottom)
         .navigationTitle("Tuner")

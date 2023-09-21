@@ -4,7 +4,7 @@ const int potentiometerPin = A0; // Potentiometer pin
 const int speakerPin = 8;  // Speaker pin
 
 //const unsigned long bitDuration = 1000; // 0.001 seconds
-const unsigned long bitDuration = 400000; // 0.1 seconds
+const unsigned long bitDuration = 100000; // 0.1 seconds
 
 // Define the 4-bit binary value to be modulated
 const byte dataToModulate = 0b1010; // Change this to your desired 4-bit binary value
@@ -78,10 +78,11 @@ void playSound() {
   }
 
   // Delay before transmitting the next set of bits
-  delay(1000); // Adjust as needed
+  delay(1000);
 }
 
 unsigned int carrierFrequency() { 
+  return 2000;
   return frequencies[frequencyIndex];
 }
 
