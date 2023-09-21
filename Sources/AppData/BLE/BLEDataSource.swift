@@ -27,8 +27,10 @@ public class BLEDataSource: NSObject {
             .sink { [weak self] _ in
                 guard let self, self.isActive else { return }
                 let currentTimeString = self.dateFormatter.string(from: Date())
-                print("\(currentTimeString) Scheduling RSSI poll…")
-                self.pollRssis()
+                if !self.peripherals.isEmpty {
+                    self.pollRssis()
+                    print("\(currentTimeString) Scheduled RSSI poll.")
+                }
             }
             .store(in: &cancellables)
     }
@@ -57,8 +59,8 @@ extension BLEDataSource: CBCentralManagerDelegate {
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
-        case .poweredOn:
-            break
+        case .poweredOn where isActive:
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
         default:
             print(central.state)
         }
@@ -72,13 +74,18 @@ extension BLEDataSource: CBCentralManagerDelegate {
     ) {
         let isKnown = peripherals.contains(peripheral)
 
+        guard (peripheral.name ?? "").hasPrefix("Echo-BLE-00") else {
+            // we're not interested in anything else
+            return
+        }
+
         func printMe() {
             let currentTimeString = dateFormatter.string(from: Date())
             let prefix = !isKnown ? "Discovered: " : "Updated:    "
             print("\(currentTimeString) \(prefix) \(peripheral.name ?? "Unknown Device") - \(peripheral.identifier) \(RSSI)")
         }
 
-        // let blacklist = ["Apple", "iPad", "iPhone", "Ringen", "Edwin", "Bagage", "Rommel", "Studeerkamer"]
+        printMe()
 
         // always store the RSSI
         rssis[peripheral.identifier] = RSSI
@@ -88,11 +95,18 @@ extension BLEDataSource: CBCentralManagerDelegate {
             peripheral.delegate = self
             central.connect(peripheral)
             broadcast()
+        } else {
         }
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected to \(peripheral.name ?? "<?>").")
+    }
+
+    public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        peripherals.removeAll { $0 == peripheral }
+        print("Disconnected from \(peripheral.name ?? "<?>") (\(error?.localizedDescription ?? "")).")
+        broadcast()
     }
 }
 
@@ -113,7 +127,10 @@ extension BLEDataSource: BLEDataSourceProtocol {
     public func activate() {
         guard !isActive else { return print("BLEDS already active.") }
         isActive = true
-        centralManager.scanForPeripherals(withServices: [.deviceInformationService], options: nil)
+//        centralManager.scanForPeripherals(withServices: [.deviceInformationService], options: nil)
+        if centralManager.state == .poweredOn {
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
+        }
     }
 
     public func deactivate() {

@@ -10,8 +10,11 @@ struct Environment {
 
     init() {
         let estimoteDataSource = EstimoteDataSource()
-        let bleDataSource = BLEDataSource()
+        // estimoteDataSource.activate()
         estimoteRepository = EstimoteRepository(dataSource: estimoteDataSource)
+
+        let bleDataSource = BLEDataSource()
+        bleDataSource.activate()
         bleRepository = BLERepository(dataSource: bleDataSource)
 
         print("Environment is ready.")

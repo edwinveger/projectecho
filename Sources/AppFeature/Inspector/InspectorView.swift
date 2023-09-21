@@ -11,40 +11,54 @@ public struct InspectorView: View {
     }
 
     public var body: some View {
-        NavigationView {
-            WithViewStore(store, observe: \.rooms) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            NavigationView {
                 VStack {
-                    ForEach(viewStore.state, id: \.room) { nearbyRoom in
-                        nearbyRoomView(nearbyRoom)
+                    ForEach(viewStore.rooms, id: \.room) { nearbyRoom in
+                        nearbyRoomView(nearbyRoom, isUWB: viewStore.isUWBEnabled)
                         Divider()
                     }
                     Spacer()
                 }
                 .padding()
                 .task { await viewStore.send(.task).finish() }
-
+                .navigationTitle(viewStore.isUWBEnabled ? "Inspector UWB" : "Inspector BLE")
             }
-            .navigationTitle("Inspector")
-        }
 
-        .tabItem {
-            Label("Inspector", systemImage: "waveform.and.magnifyingglass")
+            .tabItem {
+                Label(
+                    viewStore.isUWBEnabled ? "Inspector UWB" : "Inspector BLE",
+                    systemImage: "waveform.and.magnifyingglass"
+                )
+            }
         }
     }
 
-    let measurementFormatter: NumberFormatter = {
+    private let measurementFormatter: NumberFormatter = {
         let f = NumberFormatter()
         f.minimumFractionDigits = 2
         f.maximumFractionDigits = 2
         return f
     }()
 
-    func nearbyRoomView(_ nearbyRoom: NearbyRoom) -> some View {
+    private let rssiFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.maximumFractionDigits = 0
+        return f
+    }()
+
+    func nearbyRoomView(_ nearbyRoom: NearbyRoom, isUWB: Bool) -> some View {
         HStack {
-            nearbyRoom.room.image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 48, maxHeight: 48)
+            if isUWB {
+                nearbyRoom.room.image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 48, maxHeight: 48)
+            } else {
+                Image(systemName: "circle.inset.filled")
+                    .frame(maxWidth: 48, maxHeight: 48)
+                    .foregroundColor(nearbyRoom.room.color)
+            }
 
             Text(nearbyRoom.room.description)
 
@@ -58,6 +72,8 @@ public struct InspectorView: View {
                     ) ?? ""
                         ) + " m."
                 )
+            } else if let rssi = nearbyRoom.rssi {
+                Text("RSSI: \(Int(rssi))")
             }
         }
         .font(.system(size: 20))
@@ -70,9 +86,12 @@ struct InspectorView_Previews: PreviewProvider {
         initialState: .init()
     ) {
         Inspector()
+            .dependency(\.isUWBEnabled, false)
     }
 
     static var previews: some View {
-        InspectorView(store: store)
+        TabView {
+            InspectorView(store: store)
+        }
     }
 }

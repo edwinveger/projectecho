@@ -6,6 +6,7 @@ public struct Inspector: Reducer {
     public struct State: Equatable {
 
         var rooms: [NearbyRoom] = []
+        var isUWBEnabled = false
 
         public init() { }
     }
@@ -20,13 +21,23 @@ public struct Inspector: Reducer {
 
     public init() { }
 
-    @Dependency(\.observeNearbyRoomsUWB) var observeNearbyRooms
+    @Dependency(\.isUWBEnabled) var isUWBEnabled
+    @Dependency(\.observeNearbyRoomsUWB) var observeNearbyRoomsUWB
+    @Dependency(\.observeNearbyRoomsBLE) var observeNearbyRoomsBLE
 
     public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .task:
+            state.isUWBEnabled = isUWBEnabled
+
             return .run { send in
-              for await rooms in observeNearbyRooms.publisher.values {
+                let publisher = if isUWBEnabled {
+                    observeNearbyRoomsUWB.publisher
+                } else {
+                    observeNearbyRoomsBLE.publisher
+                }
+
+              for await rooms in publisher.values {
                 await send(.didReceiveRooms(rooms))
               }
             }

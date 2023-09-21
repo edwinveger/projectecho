@@ -27,6 +27,14 @@ struct RootView: View {
                 )
                 .tag(Root.SelectedTab.roomsUWB)
 
+                InspectorView(
+                    store: store.scope(
+                        state: \.inspectorUWBState,
+                        action: Root.Action.inspectorUWB
+                    )
+                )
+                .tag(Root.SelectedTab.inspectorUWB)
+
                 RoomControlsView(
                     store: store.scope(
                         state: \.roomControlsBLEState,
@@ -37,11 +45,11 @@ struct RootView: View {
 
                 InspectorView(
                     store: store.scope(
-                        state: \.inspectorState,
-                        action: Root.Action.inspector
+                        state: \.inspectorBLEState,
+                        action: Root.Action.inspectorBLE
                     )
                 )
-                .tag(Root.SelectedTab.inspector)
+                .tag(Root.SelectedTab.inspectorBLE)
 
                 // ArduinoBeaconView()
                 //     .tag(Root.SelectedTab.arduino)

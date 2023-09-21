@@ -1,26 +1,6 @@
 import Combine
 import Dependencies
 
-/// Represents a detected, nearby room.
-public struct NearbyRoom: Equatable {
-
-    public let room: Room
-    /// Distance in meters.
-    public let distance: Float?
-
-    public let rssi: Float?
-
-    public init(
-        room: Room,
-        distance: Float? = nil,
-        rssi: Float? = nil
-    ) {
-        self.room = room
-        self.distance = distance
-        self.rssi = rssi
-    }
-}
-
 public protocol ObserveNearbyRoomsProtocol: Activatable {
 
     /// Emits a set of rooms along with a confidence value.
@@ -33,8 +13,8 @@ private struct ObserveNearbyRoomsBLEKey: TestDependencyKey {
 
     typealias Value = ObserveNearbyRoomsProtocol
 
-    public static let previewValue = PreviewObserveNearbyRoomsService() as Value
-    public static let testValue = PreviewObserveNearbyRoomsService() as Value
+    public static let previewValue = PreviewObserveNearbyRoomsBLEService() as Value
+    public static let testValue = PreviewObserveNearbyRoomsBLEService() as Value
 }
 
 extension DependencyValues {
@@ -51,8 +31,8 @@ private struct ObserveNearbyRoomsUWBKey: TestDependencyKey {
 
     typealias Value = ObserveNearbyRoomsProtocol
 
-    public static let previewValue = PreviewObserveNearbyRoomsService() as Value
-    public static let testValue = PreviewObserveNearbyRoomsService() as Value
+    public static let previewValue = PreviewObserveNearbyRoomsUWBService() as Value
+    public static let testValue = PreviewObserveNearbyRoomsUWBService() as Value
 }
 
 extension DependencyValues {
@@ -65,7 +45,7 @@ extension DependencyValues {
 
 // MARK: - Previews
 
-private class PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
+private class PreviewObserveNearbyRoomsUWBService: ObserveNearbyRoomsProtocol {
 
     var isActive: Bool = false
 
@@ -91,3 +71,31 @@ private class PreviewObserveNearbyRoomsService: ObserveNearbyRoomsProtocol {
         subject.eraseToAnyPublisher()
     }
 }
+
+private class PreviewObserveNearbyRoomsBLEService: ObserveNearbyRoomsProtocol {
+
+    var isActive: Bool = false
+
+    public func activate() {
+        guard !isActive else { return print("DS already active.") }
+        isActive = true
+    }
+
+    public func deactivate() {
+        guard isActive else { return print("DS not active.") }
+        isActive = false
+    }
+
+    let subject = CurrentValueSubject<[NearbyRoom], Never>(
+        [
+            .init(room: .bathroom, rssi: -5),
+            .init(room: .livingRoom, rssi: -10),
+            .init(room: .bedroom, rssi: -15)
+        ]
+    )
+
+    var publisher: AnyPublisher<[NearbyRoom], Never> {
+        subject.eraseToAnyPublisher()
+    }
+}
+

@@ -7,7 +7,6 @@ public class EstimoteRepository {
 
     public init(dataSource: EstimoteDataSourceProtocol) {
         self.dataSource = dataSource
-        activate()
     }
 }
 

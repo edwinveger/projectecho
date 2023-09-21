@@ -15,7 +15,8 @@ struct Root: Reducer {
         case roomsBLE
         case arduino
         case estimote
-        case inspector
+        case inspectorUWB
+        case inspectorBLE
         case fft
     }
 
@@ -25,7 +26,8 @@ struct Root: Reducer {
         // MARK: Child state
         var roomControlsUWBState = RoomControls.State()
         var roomControlsBLEState = RoomControls.State()
-        var inspectorState = Inspector.State()
+        var inspectorUWBState = Inspector.State()
+        var inspectorBLEState = Inspector.State()
     }
 
     enum Action: Equatable {
@@ -34,7 +36,8 @@ struct Root: Reducer {
         // MARK: Child actions
         case roomsUWB(RoomControls.Action)
         case roomsBLE(RoomControls.Action)
-        case inspector(Inspector.Action)
+        case inspectorUWB(Inspector.Action)
+        case inspectorBLE(Inspector.Action)
     }
 
     private struct _Reducer: Reducer {
@@ -48,8 +51,9 @@ struct Root: Reducer {
                 return .none
             case .roomsBLE:
                 return .none
-            case .inspector(let action):
-                _ = action
+            case .inspectorUWB:
+                return .none
+            case .inspectorBLE:
                 return .none
             }
         }
@@ -57,13 +61,6 @@ struct Root: Reducer {
 
     var body: some Reducer<State, Action> {
         _Reducer()
-
-        Scope(
-            state: \.inspectorState,
-            action: /Action.inspector
-        ) {
-            Inspector()
-        }
 
         Scope(
             state: \.roomControlsUWBState,
@@ -78,6 +75,22 @@ struct Root: Reducer {
             action: /Action.roomsBLE
         ) {
             RoomControls()
+                .dependency(\.isUWBEnabled, false)
+        }
+
+        Scope(
+            state: \.inspectorUWBState,
+            action: /Action.inspectorUWB
+        ) {
+            Inspector()
+                .dependency(\.isUWBEnabled, true)
+        }
+
+        Scope(
+            state: \.inspectorBLEState,
+            action: /Action.inspectorBLE
+        ) {
+            Inspector()
                 .dependency(\.isUWBEnabled, false)
         }
     }
